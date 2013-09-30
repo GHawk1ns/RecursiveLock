@@ -22,7 +22,6 @@ public class RecursiveLock implements IStatsLock {
 	private int successCount;
 	private int waitersCount;
 
-
 	private FIFOLock FIFO_Queue;
 	private FIFOLock FIFO_Synch;
 
@@ -51,26 +50,6 @@ public class RecursiveLock implements IStatsLock {
 	 * @see ILock#acquire()
 	 */
 	public int acquire() {
-		/* FIFO SYNCH acquire
-		 *  check if(thread = Thread.current thread)
-		 *   if true -> ++recursiveLock
-		 *    {FIFO Synch release
-		 *    return} 
-		 *   
-		 *   now either no one owns it, or someone else owns it
-		 *   waitersCount++
-		 *   now we get the lock
-		 *   FIFO_Synch Release
-		 *   FIFO_Q Acquire
-		 *   FIFO_Synch Acquire
-		 *   owner = Thread.currentThread
-		 *   ++recursiveDepth
-		 *   ++successCount
-		 *   timeLockAcquired = ScheduledThread.getTime();
-		 */
-		//lock
-		
-		//do you own the lock?
 		if(owner==Thread.currentThread()){
 			FIFO_Synch.acquire();
 			++recursiveDepth;
@@ -100,8 +79,7 @@ public class RecursiveLock implements IStatsLock {
 	 * @see ILock#acquire_try()
 	 */
 	public int release() {
-		//start synch
-		//if you don't own this lock, throw a violation
+		//start synch if you don't own this lock, throw a violation
 		if(owner != Thread.currentThread()){
 			throw new LockProtocolViolation(this,owner,Thread.currentThread());
 		}
@@ -142,7 +120,6 @@ public class RecursiveLock implements IStatsLock {
 			//relase synch and return new recursiveDepth
 			FIFO_Synch.release();
 			//////// Synch LOCK  START ///////////////
-			
 			return recursiveDepth;
 		}
 		//current thread is not owner 
@@ -176,7 +153,6 @@ public class RecursiveLock implements IStatsLock {
 	 * @see ILock#getName()
 	 */
 	public String getName() {
-		//throw new IllegalStateException("Please implement me.");
 		return name;
 	}
 
@@ -187,7 +163,6 @@ public class RecursiveLock implements IStatsLock {
 	 * DO NOT SYNCHRONIZE 
 	 */
 	public int getWaitersCount() {
-		//throw new IllegalStateException("Please implement me.");
 		return waitersCount;
 	}
 
@@ -198,7 +173,6 @@ public class RecursiveLock implements IStatsLock {
 	 * DO NOT SYNCHRONIZE 
 	 */
 	public int getTrySuccessCount() {
-		//throw new IllegalStateException("Please implement me.");
 		return successCount;
 	}
 
@@ -209,7 +183,6 @@ public class RecursiveLock implements IStatsLock {
 	 * DO NOT SYNCHRONIZE 
 	 */
 	public int getTryFailCount() {
-		//throw new IllegalStateException("Please implement me.");
 		return failCount;
 	}
 
@@ -220,7 +193,6 @@ public class RecursiveLock implements IStatsLock {
 	 * DO NOT SYNCHRONIZE 
 	 */
 	public long getTotalLockHeldTime() {
-		//throw new IllegalStateException("Please implement me.");
 		return totalTime;
 	}
 
